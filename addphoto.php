@@ -10,15 +10,15 @@ $ip=$_SESSION["ip"];
 
 ?>
 <?php
-include("connection.php"); //Establishing connection with our database
+include("connection.php"); // connection with database
 
 
 //check session highjacking
 if (!($ip==$_SERVER['REMOTE_ADDR'])){
-    header("location: logout.php"); // Redirecting To Other Page
+    header("location: logout.php"); // Redirecting To logout
 }
 
-//check logut/idle time
+//idle time out
 if($_SESSION ["timeout"]+60 < time()){
 
     //session timed out
@@ -35,22 +35,21 @@ if(isset($_POST["submit"]))
     $title = $_POST["title"];
     $desc = $_POST["desc"];
     $url = "test";
-    //clean input title
+    //sanitize input title
     $title = stripslashes( $title );
     $title=mysqli_real_escape_string($db,$title);
     $title = htmlspecialchars( $title );
 
 
-    //clean input description
     $desc = stripslashes( $desc );
     $desc=mysqli_real_escape_string($db,$desc);
     $desc = htmlspecialchars( $desc );
 
 
-    //check for file upload error
+    //checking for pic upload error
     if($_FILES['fileToUpload']['error'] == 0) {
 
-        // Where are we going to be writing to?
+        //directory
         $target_dir = "uploads/";
         $target_file = basename($_FILES['fileToUpload']['name']);
 
@@ -66,16 +65,16 @@ if(isset($_POST["submit"]))
 
         //restrict file type and size
         if( ( strtolower( $uploaded_ext ) == "jpg" || strtolower( $uploaded_ext ) == "jpeg" || strtolower( $uploaded_ext ) == "png" ) &&
-            ( $uploaded_size < 600000 ) &&
+            ( $uploaded_size < 500000 ) &&
             getimagesize( $uploaded_tmp ) ) {
 
-            // Can we move the file to the upload folder?
+            
             if (move_uploaded_file($uploaded_tmp, $target_file)) {
                 //connect to db
                 $mysqli = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
                 //if(!$mysqli) die('Could not connect$: ' . mysqli_error());
 
-                //test connection
+                //connection to db
                 if ($mysqli->connect_errno) {
                     echo "Connection Fail:Check network connection";//: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
                 }
@@ -93,12 +92,12 @@ if(isset($_POST["submit"]))
                 $msg = "Your image was not uploaded";
             }
         }else{
-            $msg = "Your image was not uploaded. We can only accept JPEG , PNG or  a maximum size of 600kb.";
+            $msg = "Your image was not uploaded. We can only accept JPEG ,JPG or PNG ";
         }
 
     }
     else{
-        $msg = "You need to login first";
+        $msg = "Please login first";
     }
 }
 
