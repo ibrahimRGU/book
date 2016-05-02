@@ -56,7 +56,7 @@ if(isset($_POST["submit"]))
        $result=1;
         if($result)
         {
-            $msg = "Thank You! you are now registered. click <a href='../../PhotoComment/index.php'>here</a> to login";
+            $msg = "Thank You! you are now registered. click <a href='index.php'>here</a> to login";
         }
 
     }
